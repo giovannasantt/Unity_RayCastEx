@@ -1,0 +1,107 @@
+ if (UnityEngine.Input.GetKey(KeyCode.Mouse0)) --> Para lançar um raio na posição que o mouse está
+        {
+           
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition); --> Para determinar a posição do mouse
+            color = Color.green; --> Definindo a cor
+            Lancar(ray, color, 1 ); --> Para lançar o raio e informações
+        }
+ if (UnityEngine.Input.GetKey(KeyCode.Space)) --> Para lançar um raio amarelo do meio do obj
+        {
+            ray = new Ray(transform.position, transform.forward); --> Para definir a posição que vai sair (frente/meio do obj)
+            color = Color.yellow;--> Definindo a cor do obj
+           Lancar(ray, color,2); -- Informações do raio para lançar
+        }
+ if (UnityEngine.Input.GetKey(KeyCode.Return)) --> Para apertar enter e sair um obj do meio da tela (câmera)
+        {
+            point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight/2, 0); --> Ajustando o meio da câmera
+            ray = _camera.ScreenPointToRay(point); --> lançando o raio da câmera
+            color = Color.blue; --> cor do raio
+            Lancar(ray, color, 3); --> Informações do raio
+        }
+
+  private void Lancar(Ray ray, Color color, int tipo) --> Instanciando o lançar
+    {
+        Debug.Log("Origem: " + ray.origin); --> Para informar a origem do raio e aparecer escrito no debug
+
+        Debug.Log("Direção: " + ray.direction); --> Para informar a direção do raio e aparecer escrito no debug
+if (Physics.Raycast(ray, out hitData)) --> Para verificar os dados do hitData (se bateu ou se não bateu)
+        {
+            Vector3 hitPosition = hitData.point; --> Declarando o valor do hitPosition como hitData.point
+            Debug.Log(" hitPosition:" + hitPosition); --> Aparecer no debug escrito a posição de onde bateu
+           
+
+            float hitDistance = hitData.distance; --> Declarando a var distância
+            Debug.Log("Distancia: " + hitDistance); --> Para escrever no debug a distância
+            string tag = hitData.collider.tag; --> Para dar a variável string o nome do obj colidido
+            Debug.Log("Tag:" + tag); --> Escrever no debug o nome da tag
+            GameObject hitObject = hitData.transform.gameObject; -->Definindo o valor do gameObject hitObject
+            Debug.DrawRay(ray.origin, hitPosition * hitDistance, color); -->Para desenhar o raio na tela
+            StartCoroutine(SphereIndicator(hitPosition, tipo )); --> Para iniciar uma co-rotina (executa duas ou mais coisas ao mesmo tempo)
+            if (tag =="target") --> Checando a tag
+                Destroy(hitObject); --> Destruir o obj caso a informação da tag seja verdadeira
+        }
+  else
+        {
+            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.magenta); --> Se não for verdadeira, desenhar um raio magenta (origem, tamanho, cor)
+            Debug.Log("Target missed"); --> escrever no log
+        }
+
+    }
+  private IEnumerator SphereIndicator(Vector3 pos,int tipo) --> Instanciando o IEnumerator 
+    {
+        GameObject gameObj =null; --> definindo que o gameObj está vazio
+        switch (tipo) --> if else com mais opções de entrada
+        {
+            case 1:
+                gameObj = CriaObject(pos, "cherry"); --> o valor do gameobj é definido como "criaobj"
+                break;
+            case 2:
+                gameObj = InstanciaPrefab(pos); --> o valor do gameobj está definido como "instanciaprefab"
+                break;
+            case 3:
+                gameObj = CriaObject(pos, "blue"); --> o valor do gameObj está definido como "criaobj"
+                break;
+           
+        }
+ yield return new WaitForSeconds(1); --> Comando para esperar ("atrasar" o processamento) por X tempo
+        Destroy(gameObj); --> Destruir o obj após o tempo determinado
+    }
+ void OnDrawGizmosSelected() --> Para quando o Gizmos for acionado (debug físico que mostra a trajetória do raio) executar o comando
+    {
+        // Draws a 5 unit long red line in front of the object
+        Gizmos.color = Color.red; --> Definindo a cor
+        
+        Gizmos.DrawRay(ray); --> Desenhando o raio
+    }
+ GameObject CriaObject(Vector3 pos, string material) --> Instanciando o obj
+    {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere); --> Definindo os valores da esfera
+        sphere.transform.position = pos; --> Definindo a posição da esfera
+        sphere.transform.localScale = new Vector3(3, 3, 3); --> tamanho da esfera
+        string src = string.Concat("material/", material); --> material da esfera
+        Material bombMaterial = Resources.Load(src, typeof(Material)) as Material; --> material chamado pelo script
+
+        sphere.GetComponent<Renderer>().material = bombMaterial;
+        return sphere;
+    }
+
+ GameObject InstanciaPrefab(Vector3 pos) --> Instanciando o prefab
+    {
+       
+        GameObject prefab = Resources.Load("prefab/bomb", typeof(GameObject)) as GameObject;--> definindo obj como prefab        
+        return Instantiate(prefab, pos, Quaternion.identity); --> dando as informações do obj
+    }
+
+    private IEnumerator GerarTarget() --> calculando o tempo de delay
+    {
+        while (true) --> enquanto for verdade
+        {
+            float x = Random.Range(-150.0f, 80.0f);
+            float y = Random.Range(-34.0f, 45.0f);
+            float z = Random.Range(-50.0f, 5.0f);
+            Vector3 position = new Vector3(x, y, z); --> juntando as informações da localização do obj
+            Instantiate(Resources.Load("prefab/target", typeof(GameObject)) as GameObject, position, Quaternion.identity); --> instanciando o prefab para executar o comando
+            yield return new WaitForSeconds(5); --> tempo de delay
+        }
+    }
+}

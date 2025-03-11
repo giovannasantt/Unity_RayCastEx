@@ -1,0 +1,61 @@
+Ray raio;
+Vector3 local;
+ RaycastHit hitData;
+Color cor;
+public Camera ccamera;
+
+void Start()
+    {
+     
+        Debug.Log("Começou uhul");
+        StartCoroutine(GerarTarget());
+
+    }
+
+Update(){
+
+if (UnityEngine.Input.GetKey(KeyCode.Mouse0)) // Quando clicar no botão direito do mouse...
+        {
+           
+            raio = Camera.main.ScreenPointToRay(Input.mousePosition); // Localiza a posição do mouse na tela
+            color = Color.purple; // Define a cor, roxo
+            Atirar(raio, cor, mouse); // Chama o método, e define as propriedades
+        }
+
+if (UnityEngine.Input.GetKey(KeyCode.E)) // Quando clicar na tecla E...
+{
+raio = new Ray (transform.position, transform.forward); // Define a posição do objeto, e o centro do objeto, de onde o raio  vai sair
+cor = Color.green; // Define a cor, verde
+Atirar (raio, cor, obj) // Chama o método, e define as propriedades
+}
+
+if (UnityEngine.Input.GetKey(KeyCode.Q)) // Quando clicar na tecla Q...
+{
+local = new Vector3(ccamera.pixelWidth / 2, ccamera.pixelHeight/2, 0); //ta definindo o centro da câmera, pegando a altura e dividindo por 2, depois fazendo o mesmo com a largura.
+raio = ccamera.ScreenPointToRay(local); //definindo a origem do raio
+cor = Color.orange; //cor do raio
+Atirar(raio, cor, camera);// chamando o método e definindo propriedades
+}}
+
+private void Atirar(Ray raio, Color cor, string tipo)
+{
+Debug.Log("Inicio "+ raio.origin);
+Debug.Log("Caminho "+ raio.direction);
+
+ if (Physics.Raycast(raio, out hitData))
+        {
+            Vector3 LocalDeImpacto = hitData.local;
+            Debug.Log("Local de impacto: " + LocaDeImpacto);
+           
+
+            float hitData = hitData.distance;
+            Debug.Log("Distancia: " + hitDistance);
+            string tag = hitData.collider.tag;
+            Debug.Log("Tag:" + tag);
+            GameObject hitObject = hitData.transform.gameObject;
+            Debug.DrawRay(ray.origin, hitPosition * hitDistance, color);
+            StartCoroutine(SphereIndicator(hitPosition, tipo ));
+
+            if (tag =="target")
+                Destroy(hitObject);
+        }}

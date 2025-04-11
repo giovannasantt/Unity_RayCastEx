@@ -17,7 +17,7 @@ public class testeraycast : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("ComeÁou uhul");
+        Debug.Log("Come√ßou uhul");
         StartCoroutine(GerarTarget());
 
 
@@ -27,26 +27,26 @@ public class testeraycast : MonoBehaviour
     void Update()
     {
 
-        if (UnityEngine.Input.GetKey(KeyCode.Mouse0)) // Quando clicar no bot„o direito do mouse...
+        if (UnityEngine.Input.GetKey(KeyCode.Mouse0)) // Quando clicar no bot√£o direito do mouse...
         {
 
-            raio = Camera.main.ScreenPointToRay(Input.mousePosition); // Localiza a posiÁ„o do mouse na tela
+            raio = Camera.main.ScreenPointToRay(Input.mousePosition); // Localiza a posi√ß√£o do mouse na tela
             cor = UnityEngine.Color.red; // Define a cor, vermelho
-            Atirar(raio, cor, 1); // Chama o mÈtodo, e define as propriedades
+            Atirar(raio, cor, 1); // Chama o m√©todo, e define as propriedades
         }
         if (UnityEngine.Input.GetKey(KeyCode.E)) // Quando clicar na tecla E...
         {
-            raio = new Ray(transform.position, transform.forward); // Define a posiÁ„o do objeto, e o centro do objeto, de onde o raio  vai sair
+            raio = new Ray(transform.position, transform.forward); // Define a posi√ß√£o do objeto, e o centro do objeto, de onde o raio  vai sair
             cor = UnityEngine.Color.green; // Define a cor, verde
-            Atirar(raio, cor, 2); // Chama o mÈtodo, e define as propriedades
+            Atirar(raio, cor, 2); // Chama o m√©todo, e define as propriedades
 }
 
         if (UnityEngine.Input.GetKey(KeyCode.Q)) // Quando clicar na tecla Q...
         {
-            local = new Vector3(ccamera.pixelWidth / 2, ccamera.pixelHeight / 2, 0); //ta definindo o centro da c‚mera, pegando a altura e dividindo por 2, depois fazendo o mesmo com a largura.
+            local = new Vector3(ccamera.pixelWidth / 2, ccamera.pixelHeight / 2, 0); //ta definindo o centro da c√¢mera, pegando a altura e dividindo por 2, depois fazendo o mesmo com a largura.
             raio = ccamera.ScreenPointToRay(local); //definindo a origem do raio
             cor = UnityEngine.Color.yellow; //cor do raio
-            Atirar(raio, cor, 3);// chamando o mÈtodo e definindo propriedades
+            Atirar(raio, cor, 3);// chamando o m√©todo e definindo propriedades
         }
     }
     private void Atirar(Ray raio, UnityEngine.Color cor, int tipo)
